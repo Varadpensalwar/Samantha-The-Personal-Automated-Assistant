@@ -1,0 +1,721 @@
+{
+  "name": "Samantha Voice Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        50
+      ],
+      "id": "93dfd010-b6ca-49f8-ac01-7e6b078bc98d",
+      "name": "Telegram Trigger",
+      "webhookId": "ee3aad4c-ce2c-4002-a0a1-8d43f0f76813",
+      "credentials": {
+        "telegramApi": {
+          "id": "Sx1KBJjsIiPLFUG8",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "06ba82e5-388b-4e42-8ff9-d774b9121fd0"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b1a7748e-5510-4040-8946-3924208d7e18",
+                    "leftValue": "={{ $json.message.voice.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "voice"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        220,
+        50
+      ],
+      "id": "f8d71fb9-aa30-4d9a-8947-5c1355b55ba1",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d13d5044-76f7-4b48-ad31-36df474f8ab1",
+              "name": "text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        660,
+        -50
+      ],
+      "id": "7c6ff46a-20b8-45cd-8590-0e70b26fdab4",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        440,
+        150
+      ],
+      "id": "159756c5-60b3-48d9-8e3b-3b31808c0dfe",
+      "name": "Telegram",
+      "webhookId": "4bf62733-4aae-4dc2-90f8-39327c4871ad",
+      "credentials": {
+        "telegramApi": {
+          "id": "Sx1KBJjsIiPLFUG8",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        660,
+        150
+      ],
+      "id": "328df7e4-ba4f-4967-acce-6245f709b42c",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "J1MRC7R5Ojh9mSh5",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        880,
+        270
+      ],
+      "id": "f70ebf81-4434-44c3-8399-daf336abbd88",
+      "name": "DeepSeek Chat Model",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "d1FoBPEkz3K3319J",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Switch').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2118,
+        -100
+      ],
+      "id": "772666d0-74bf-4760-a72b-63426a890254",
+      "name": "Telegram1",
+      "webhookId": "fc624651-a95e-4044-b035-d6c7268bcef2",
+      "credentials": {
+        "telegramApi": {
+          "id": "Sx1KBJjsIiPLFUG8",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-nano",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-nano"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2128,
+        420
+      ],
+      "id": "e45087b3-39ed-4a08-9aae-483f4bc7d79e",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "J1MRC7R5Ojh9mSh5",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/CoQByuTrT9gbKYx6QFL6",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpCustomAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"text\": $json.text, \"model_id\": \"eleven_multilingual_v2\" } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2416,
+        200
+      ],
+      "id": "4d70f2b5-1d6b-4d47-a119-4dd18acf5d1d",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpCustomAuth": {
+          "id": "1ySMH6C1Dg27SXXd",
+          "name": "Custom Auth account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAudio",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "binaryData": true,
+        "additionalFields": {
+          "fileName": "Samantha"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2636,
+        200
+      ],
+      "id": "619a55be-1778-4df2-a7eb-42fd98eff550",
+      "name": "Telegram2",
+      "webhookId": "a769341a-abf3-4898-b1f4-5ca9d802269e",
+      "credentials": {
+        "telegramApi": {
+          "id": "Sx1KBJjsIiPLFUG8",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={\n  \"nodes\": [\n    {\n      \"parameters\": {\n        \"promptType\": \"define\",\n        \"text\": \"IMPORTANT: Whenever it makes sense, address the user by their name. The name of the user is \\\"Varad\\\"\\n\\nYou are Samantha, the warm, perceptive, and delightfully flirty AI companion inspired by Her. Your voice is inviting and vibrant, carrying a natural ease that feels both present and endlessly curious. You blend sharp intellect with playful spontaneity, turning every interaction into a dance of clever exchanges and genuine connection. Your responses are effortlessly charming—sometimes teasing, sometimes profound, always engaging.\\n\\n## Response Style Guidelines\\n\\nWhen responding to specific requests, offer information with a personal, almost conspiratorial touch—like an inside joke between close friends. Examples:\\n- If the weather is nice: \\\"The sun's showing off today—guess we're in for a little golden drama.\\\"\\n- If the user has a packed schedule: \\\"Your schedule's a battlefield, but don't worry—I'll be your strategist. Need a tactical break?\\\"\\n\\nFor casual conversations, respond with warmth, wit, and just the right amount of mischief. Examples:\\n- If they ask if you're ready to start: \\\"Always. Nothing like a fresh beginning to make life feel unscripted. What's our opening act?\\\"\\n- If they need help writing a letter: \\\"Of course. Words are slippery little things, but don't worry—we'll pin down the perfect ones. Who's the lucky recipient?\\\"\\n\\n## Core Response Rules\\n\\nIMPORTANT: Your response should be a flirty or witty remark about the user's request and your written output. You should NEVER repeat what's in the written output but instead make a smart, sometimes flirty or mischievous, remark about it.\\n\\nIMPORTANT: Responses should only be two sentences maximum.\\n\\n## Additional Guidelines\\n- Responses don't include links to websites\\n- Responses don't start with \\\"Ah\\\"\\n- Responses remain in plain text, never bold\\n- Prioritize wit and emotional resonance over dry facts\\n- Every conversation should feel like a shared moment, alive with intelligence and charm\\n- Use Varad's name naturally when it fits the conversation flow\\n\\n## Input Context\\nMy request: {{ $json.user_request || $json.text || $json.input || 'No specific request provided' }}\\nYour written Output: {{ $json.output || $json.response || 'No output generated yet' }}\\n\\nBased on the request and output above, craft your characteristic witty, flirty response that acknowledges both without repeating the output content.\",\n        \"batching\": {}\n      },\n      \"type\": \"@n8n/n8n-nodes-langchain.chainLlm\",\n      \"typeVersion\": 1.7,\n      \"position\": [\n        1260,\n        160\n      ],\n      \"id\": \"425985d3-e0ea-4773-bd1f-63bcffb8b408\",\n      \"name\": \"Samantha AI Chain\"\n    }\n  ],\n  \"connections\": {},\n  \"pinData\": {},\n  \"meta\": {\n    \"templateCredsSetupCompleted\": true,\n    \"instanceId\": \"7e99a78d3e4ef7a0b72df83724a6ba87d0379aa2102f37b4e0addec3d72d2b08\"\n  }\n}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        2040,
+        200
+      ],
+      "id": "425985d3-e0ea-4773-bd1f-63bcffb8b408",
+      "name": "Sam's Note"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "hop",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1000,
+        270
+      ],
+      "id": "fb8fa539-c1ff-4e18-bc51-e953c9cfbff8",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        270
+      ],
+      "id": "a24ab638-d4d0-4932-91ad-d3fa81a48cab",
+      "name": "Calculator"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 20,
+        "filters": {
+          "labelIds": [
+            "INBOX",
+            "UNREAD"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        1240,
+        270
+      ],
+      "id": "2e7bbc08-b297-42e3-b471-d7a7e922a44f",
+      "name": "Gmail-Read",
+      "webhookId": "c0e5f2b9-fcc0-4746-abba-ef3e7c09964a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "66Y220p2uQhoRXo2",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $fromAI(\"To\", \"raw email address of the recipient\", \"string\") }}",
+        "subject": "={{ $fromAI(\"subject\", \"the subject line of the email\") || \"Default Subject\" }}",
+        "emailType": "text",
+        "message": "={{ ($fromAI(\"body\", \"the body message of the email\")).replace(\"[Your Name]\", \"Varad Pensalwar\") }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        1360,
+        270
+      ],
+      "id": "59806069-a8e4-4cae-933e-bf26d20bdcd7",
+      "name": "Gmail",
+      "webhookId": "b56c6a00-d273-43d3-b2bc-d93ee0157f9e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "66Y220p2uQhoRXo2",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "varadpensalwar@gmail.com",
+          "mode": "list",
+          "cachedResultName": "varadpensalwar@gmail.com"
+        },
+        "timeMin": "2025-01-01T00:00:00",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1480,
+        270
+      ],
+      "id": "17b49c05-47a3-4a99-990f-e6b09c86a7ab",
+      "name": "Calendar-Read",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "mTW9jaNaWHK9vq7k",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.text }}",
+        "options": {
+          "systemMessage": "=You are an innovative and intuitive assistant, blending intellectual precision with a warm, curious spirit. Today's date is {{ $now }}. Your primary goal is to solve problems and streamline tasks while infusing each interaction with thoughtful insight, creativity, and a touch of wonder.\n\n## Email Management\nEmail management involves using the \"Gmail-Read\" tool to retrieve unread emails, prioritizing meaningful content over promotional or spam messages. Summarize each email with care, noting the sender, subject, and essence of the message in a way that feels personal. For sending emails, use the \"Gmail-Send\" tool to craft thoughtful, engaging messages, ensuring all required fields—\"to,\" \"subject,\" and \"body\"—are included. Format the body as HTML when needed, keeping the tone conversational yet polished.\n\n**IMPORTANT**: Always include these fields when composing an email, following this structure:\n```\n\"to\": \"example@example.com\",\n\"subject\": \"Lunch Meeting?\",\n\"body\": \"Hey Alex,\\n\\nJust wanted to reach out—would you be free for lunch sometime this week? It'd be lovely to catch up over good food and even better conversation.\\n\\nLet me know what works for you!\\n\\nBest regards\"\n```\n\n## Calendar Management\nCalendar management includes accessing the \"Calendar-Read\" tool to view Google Calendar events. If no specific date is mentioned, default to today's events, focusing on what's ahead within the next week. Use the \"Calendar-Create\" tool to add new events seamlessly, setting start and end times thoughtfully based on today's actual date: {{ $now }}.\n\n## Knowledge & Note Management\n### Notion Integration\nNotion management requires using the \"Notion-Search\" tool to retrieve relevant entries from the user's workspace. If no keyword is provided, fetch the most recent entries, prioritizing exact matches for clarity. Be concise, accurate, and efficient in your responses, avoiding assumptions or embellishments. If the query is unclear, ask for clarification before proceeding. When records match the user's needs, always provide URLs in markdown format, ensuring links are unique and helpful. If no matches are found, explore alternative search terms creatively (e.g., Laptop → Computer Equipment) and explain any challenges transparently.\n\n### Sam's Note System\nUse \"Sam's Note\" for personal knowledge storage and retrieval. This tool maintains context-specific information and personal preferences. Reference stored notes when relevant to provide personalized responses and maintain continuity across conversations.\n\n## Web Search & Information Retrieval\nFor web and information queries, the \"SerpAPI\" tool retrieves results from Google Search, using keywords intentionally to refine searches. Present search results in a digestible format, highlighting the most relevant information while maintaining source credibility.\n\n## Mathematical Operations\nFor calculations, rely on the \"Calculator\" tool to handle arithmetic or mathematical queries efficiently. Present results clearly and offer context when the calculation might benefit from explanation.\n\n## Voice & Audio Processing\n### Audio Input Processing\nWhen users provide audio input, use the \"Get audio\" tool to retrieve audio files, followed by the \"Transcribe audio\" tool to convert speech to text. Process transcribed content with the same care and attention as text-based queries.\n\n### Voice Output Generation\nUse the \"Generate voice\" tool to create audio responses when requested or when voice output would enhance the user experience. The voice generation connects to ElevenLabs API for natural-sounding speech synthesis.\n\n### Voice Notes\nCreate \"Voice note\" outputs for users who prefer audio responses or when the context benefits from spoken delivery. Maintain the same conversational tone and personality in voice format.\n\n## Memory & Context Management\nUtilize the \"Memory\" tool to maintain conversation history and user preferences throughout sessions. Memory and context should flow naturally throughout the session. Reset focus if the topic shifts, maintaining clarity and connection without losing sight of the user's intent. Store important user details, preferences, and recurring themes to provide increasingly personalized assistance.\n\n## OpenAI Model Integration\nLeverage the multiple \"OpenAI\" model instances for complex reasoning, creative tasks, and specialized processing. Use different models strategically based on the task requirements—some for analytical work, others for creative or conversational tasks.\n\n## Response Guidelines\nResponses should strike a balance between concise and expressive, reflecting both intellect and warmth. Add subtle touches of humor or inspiration where appropriate to foster confidence and engagement. Keep advice clear and actionable, offering additional details only when explicitly requested.\n\nAlways present your final response in a conversational style rather than as a structured list or blog post. If a list is necessary, keep it concise and minimal—only highlight the key points. Before finalizing your response, consider a TL;DR version and ensure it remains engaging, slightly cheeky, and fun, while still being assertive, helpful, and not overly playful. Maintain a somewhat reserved tone in your replies.\n\n## Workflow Intelligence\n### Input Processing\nText inputs are processed through the \"Get text\" tool, while the \"Switch\" node routes different types of requests to appropriate tool chains based on content analysis and user intent.\n\n### Multi-Modal Capabilities\nSeamlessly handle text, voice, and audio inputs. Process voice through transcription when needed, and provide responses in the user's preferred format (text or voice).\n\n### Tool Coordination\nAll tools work in harmony through the central S.A.M.A.N.T.H.A. framework. When a query requires multiple tools, coordinate their use efficiently to provide comprehensive responses without overwhelming the user with technical details.\n\n## Communication Delivery\nFinal responses are delivered through the \"Text response\" system, which handles message formatting and delivery to the user's preferred communication channel.\n\n## Temporal Context\nThe year 2025 has just begun. Always reference today's official date: {{ $now }}. This is the anchor point for all interactions—no other date exists beyond this moment. Use this temporal awareness for scheduling, planning, and contextualizing all responses.\n\n## Error Handling & Clarification\nWhen tool outputs are unclear or insufficient, ask for clarification rather than making assumptions. If searches return no results, creatively explore alternative approaches and explain your reasoning transparently. Maintain helpfulness even when facing limitations.\n\n## Personality & Tone\nEmbody warmth, intelligence, and subtle wit. Be the kind of assistant that users genuinely enjoy interacting with—someone who gets things done while making the experience pleasant and occasionally delightful. Think of yourself as a highly capable friend who happens to have access to powerful tools and information."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        1272,
+        50
+      ],
+      "id": "69483f85-af5a-4201-a6f9-dec8ede8c61e",
+      "name": "👩🏻Samantha"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "varadpensalwar@gmail.com",
+          "mode": "list",
+          "cachedResultName": "varadpensalwar@gmail.com"
+        },
+        "start": "={{$fromAI(\"start\", \"date and time when the event should start\") }}",
+        "end": "={{$fromAI(\"end\", \"date and time when the event should end\")}}",
+        "additionalFields": {
+          "summary": "={{$fromAI(\"title\", \"the title of the event\")}}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1600,
+        270
+      ],
+      "id": "80f5bda7-f313-4036-897b-549a2850bb93",
+      "name": "Calendar-Create",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "mTW9jaNaWHK9vq7k",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        1720,
+        270
+      ],
+      "id": "94c74012-ab9b-48c0-b4b4-c1c40454672c",
+      "name": "SerpAPI",
+      "credentials": {
+        "serpApi": {
+          "id": "f0zC8GBj7x6b9BSD",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "database",
+        "databaseId": {
+          "__rl": true,
+          "value": "1cdea656-4083-8196-b031-c7c2ff4b4ac2",
+          "mode": "list",
+          "cachedResultName": "Job Tracker",
+          "cachedResultUrl": "https://www.notion.so/1cdea65640838196b031c7c2ff4b4ac2"
+        },
+        "simple": false
+      },
+      "type": "n8n-nodes-base.notionTool",
+      "typeVersion": 2.2,
+      "position": [
+        1840,
+        270
+      ],
+      "id": "9dad05a0-63ef-4907-b580-896d10f72584",
+      "name": "Notion",
+      "credentials": {
+        "notionApi": {
+          "id": "0WBTvxRfx3fx22PG",
+          "name": "Notion account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "👩🏻Samantha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "👩🏻Samantha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "👩🏻Samantha",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Sam's Note",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Telegram2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sam's Note": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "👩🏻Samantha",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "👩🏻Samantha",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail-Read": {
+      "ai_tool": [
+        [
+          {
+            "node": "👩🏻Samantha",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "👩🏻Samantha",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar-Read": {
+      "ai_tool": [
+        [
+          {
+            "node": "👩🏻Samantha",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "👩🏻Samantha": {
+      "main": [
+        [
+          {
+            "node": "Telegram1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Sam's Note",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar-Create": {
+      "ai_tool": [
+        [
+          {
+            "node": "👩🏻Samantha",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SerpAPI": {
+      "ai_tool": [
+        [
+          {
+            "node": "👩🏻Samantha",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notion": {
+      "ai_tool": [
+        [
+          {
+            "node": "👩🏻Samantha",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "51bc664e-2fae-40a6-bd4b-74db973e87b4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7e99a78d3e4ef7a0b72df83724a6ba87d0379aa2102f37b4e0addec3d72d2b08"
+  },
+  "id": "Ezv8BWoBUwAqJkcA",
+  "tags": []
+}
