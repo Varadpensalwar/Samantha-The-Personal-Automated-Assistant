@@ -1,7 +1,5 @@
 # Samantha: The Personal Automated Assistant
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 ## Overview
 
 Samantha is a sophisticated, AI-powered personal assistant inspired by the movie "Her". This project implements a versatile automated assistant that interacts through Telegram, processes both text and voice messages, and responds with natural, personalized communication using state-of-the-art language models.
@@ -92,7 +90,7 @@ For deeper customization, you can modify:
 
 ## License
 
-This project is open source under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is open source under the [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT).
 
 ## Contributing
 
@@ -113,5 +111,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## Contact
 
 Varad Pensalwar - [@varadpensalwar](https://github.com/Varadpensalwar)
-
-Project Link: [https://github.com/Varadpensalwar/Samantha-The-Personal-Automated-Assistant](https://github.com/Varadpensalwar/Samantha-The-Personal-Automated-Assistant)
