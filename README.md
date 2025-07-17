@@ -1,5 +1,10 @@
 # Samantha: The Personal Automated Assistant
 
+## Live Demo
+
+[[Samantha Bot](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT).
+
+
 ## Overview
 
 Samantha is a sophisticated, AI-powered personal assistant inspired by the movie "Her". This project implements a versatile automated assistant that interacts through Telegram, processes both text and voice messages, and responds with natural, personalized communication using state-of-the-art language models.
