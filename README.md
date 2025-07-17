@@ -2,7 +2,7 @@
 
 ## Live Demo
 
-[[Samantha Bot](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT).
+[[Samantha Bot](https://drive.google.com/file/d/1NOJABPzFbWo_J1Do2meGYK8nzFOzpCe4/view?usp=sharing)]
 
 
 ## Overview
