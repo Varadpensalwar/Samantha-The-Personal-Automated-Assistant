@@ -1,8 +1,6 @@
 # Samantha: The Personal Automated Assistant
 
-## Live Demo
-
-[[Samantha Bot](https://drive.google.com/file/d/1NOJABPzFbWo_J1Do2meGYK8nzFOzpCe4/view?usp=sharing)]
+## Live [[Samantha Bot](https://drive.google.com/file/d/1NOJABPzFbWo_J1Do2meGYK8nzFOzpCe4/view?usp=sharing)]
 
 
 ## Overview
