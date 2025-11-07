@@ -1,4 +1,4 @@
-# Samantha : The Personal Automated Assistant
+# Samantha : The Personal Automated Assistant.
 
 ## Live [[Samantha Bot](https://drive.google.com/file/d/1NOJABPzFbWo_J1Do2meGYK8nzFOzpCe4/view?usp=sharing)]
 
